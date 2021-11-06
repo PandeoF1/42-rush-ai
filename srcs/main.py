@@ -12,21 +12,26 @@ def main():
 	height = input()
 	win_length = input()
 	play_order = input()
-	game_status = 0
+	game_status = 1
 	t_time = 10000
 	g_time = 100
 
 	# TODO :
 	#   . Creation of tab
 
-	tab = 0
-
 	game = Game(height, width, win_length, t_time, g_time, game_status)
 	game.show_tab()
 
 	while game.game_status:
-		test = input
-		print(test)
+		a = input()
+		b = input()
+		game.put_in_tab(a, b, 1)
+		game.show_tab()
+		a = input()
+		b = input()
+		game.put_in_tab(a, b, 2)
+		game.show_tab()
+
 
 
 if __name__ == "__main__":

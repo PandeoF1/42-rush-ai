@@ -10,7 +10,7 @@ class Game(object):
 		self.win_length = int(win_length)
 		self.t_time = int(t_time) # Total time
 		self.g_time = int(g_time) # Gain time per round
-		self.game_status = int(game_status) # 1 = in progress / 0 = finish
+		self.game_status = int(game_status) # 0 = in progress / 1 = finish
 		self.tab = self.create_tab()
 
 	def status(self):
@@ -29,6 +29,8 @@ class Game(object):
 		for i in range(0, self.height):
 			print(self.tab[i])
 
+	def put_in_tab(self, height, width, player):
+		self.tab[int(height)][int(width)] = int(player)
 
 	def basic_func(self, val):
 		print("je suis une function " + str(val))
