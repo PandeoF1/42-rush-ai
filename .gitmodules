@@ -1,0 +1,3 @@
+[submodule "rush02-referee"]
+	path = rush02-referee
+	url = https://gitlab.com/guhernan/rush02-player-open
