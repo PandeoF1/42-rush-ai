@@ -12,10 +12,9 @@ g_time = 100
 # TODO : 
 #   . Creation of tab
 
-tab = 0;
+game = Game(height, width, win_length, t_time, g_time, game_status)
 
-game = Game(tab, height, width, win_length, t_time, g_time, game_status)
-
-while (game.game_status):
+while (game.status):
 	test = input
+	game.show_tab()
 	print(test)
