@@ -1,0 +1,3 @@
+[submodule "rush02-gitlab"]
+	path = rush02-gitlab
+	url = https://gitlab.com/guhernan/rush02-player-open
