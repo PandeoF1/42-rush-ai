@@ -56,10 +56,13 @@ def main():
 			x = input()
 		else:
 			x = 0
-		game.put_in_tab(int(x), int(play_order))
+		if int(x) <= game.height - 1:
+			game.put_in_tab(int(x), int(play_order))
 		
-		game.binary_mask()
+		game.binary_mask(game.binary_a)
+		game.binary_mask(game.binary_d)
 		game.show_tab_binary()
+		game.place_point()
 		time.sleep(int(t_time) / 1000)
 		
 
