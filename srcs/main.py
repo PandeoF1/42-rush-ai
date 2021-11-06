@@ -44,7 +44,6 @@ def main():
 	#   . Creation of tab
 
 	game = Game(height, width, win_length, g_time, t_time, game_status)
-	game.show_tab()
 	while game.game_status:
 		with open('/Users/hosra/Desktop/42/42-rush-ai/srcs/status.txt') as file: # Force quit
 			first_line = file.readline() # Force quit
@@ -56,7 +55,9 @@ def main():
 		else:
 			x = 0
 		game.put_in_tab(int(x), int(play_order))
-		game.show_tab()
+		
+		game.binary_mask()
+		game.show_tab_binary()
 		time.sleep(int(t_time) / 1000)
 		
 
