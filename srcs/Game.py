@@ -1,5 +1,7 @@
 import sys
 
+# 8 -> Les autres
+# 9 -> Nous
 
 class Game(object):
 	def __init__(self, height, width, win_length, t_time, g_time, game_status):
@@ -9,21 +11,27 @@ class Game(object):
 		self.t_time = int(t_time) # Total time
 		self.g_time = int(g_time) # Gain time per round
 		self.game_status = int(game_status) # 0 = in progress / 1 = finish
-		self.tab = self.create_tab()
+		self.tab = []
 		self.max_height = 0
-		self.binary = self.create_tab()
+		self.binary = []
 
 	def status(self): # DONE
 		return (self.game_status)
 
 	def create_tab(self): # DONE
-		tab = []
-		
 		for _ in range(0, self.height):
-			line = [0] * self.width
-			tab.append(line)
+			line = []
+			for i in range(0, self.width):
+				line.append(0)
+			self.tab.append(line)
 
-		return (tab)
+
+	def create_tab_binary(self): # DONE	
+		for _ in range(0, self.height):
+			line = []
+			for i in range(0, self.width):
+				line.append(0)
+			self.binary.append(line)
 
 	def show_tab(self): # DONE (debug)
 		for i in range(0, self.height):
@@ -34,6 +42,12 @@ class Game(object):
 			print('', file=sys.stderr)
 			for j in range(0, self.width):
 				if self.binary[i][j] == 9:
+					print("\033[;34m" + str(self.binary[i][j]) + "\033[;0m", file=sys.stderr, end=' ')
+				elif self.binary[i][j] == 1:
+					print("\033[;32m" + str(self.binary[i][j]) + "\033[;0m", file=sys.stderr, end=' ')
+				elif self.binary[i][j] == 2:
+					print("\033[;33m" + str(self.binary[i][j]) + "\033[;0m", file=sys.stderr, end=' ')
+				elif self.binary[i][j] == 3:
 					print("\033[;31m" + str(self.binary[i][j]) + "\033[;0m", file=sys.stderr, end=' ')
 				else:
 					print(self.binary[i][j], file=sys.stderr, end=' ')
@@ -50,11 +64,7 @@ class Game(object):
 		self.binary[n][width] = 9
 		if n > self.max_height:
 			self.max_height = n
-	# 8 c les mechants
-	# 9 c nous
 
-	# TODO :
-	# . Clean le code lol
 	def is_winning(self, y, x):
 		t_y = y
 		t_x = x
@@ -71,22 +81,6 @@ class Game(object):
 			if count == self.win_lenght:
 				print(x) #win
 				return 1
-		#count = 0
-		#t_y = y
-		#t_x = x
-		#tt_y = y
-		#tt_x = x
-
-		#if y - 1 > 0 and self.tab[y - 1][x] == 8: #down to top
-		#	while y - 1 > 0 and self.binary[t_y][x] == 8: #down
-		#		t_y -= 1
-		#		count += 1
-		#	while y + 1 < self.height and self.binary[tt_y][x] == 8: #top
-		#		tt_y += 1
-		#		count += 1
-		#	if count == self.win_lenght:
-		#		print(x) #win
-		#		return 1
 		count = 0
 		t_y = y
 		t_x = x
@@ -103,40 +97,37 @@ class Game(object):
 			if count == self.win_lenght:
 				print(x) #win
 				return 1
-		#count = 0
-		#t_y = y
-		#t_x = x
-		#tt_y = y
-		#tt_x = x
-#
-		#if x - 1 < self.width and self.binary[y][x - 1] == 8: #left to right
-		#	while x - 1 > 0 and self.binary[y][t_x] == 8: #left
-		#		t_x -= 1
-		#		count += 1
-		#	while x + 1  < self.width and self.binary[y][tt_x] == 8: #right
-		#		tt_x += 1 
-		#		count += 1
-		#	if count == self.win_lenght:
-		#		print(x) #win
-		#		return 1
 		count = 0
 		t_y = y
 		t_x = x
-		tt_y = y
-		tt_x = x
-		if x - 1 > 0 and y + 1 < self.height and self.binary[y + 1][x - 1] == 8: #left top to down right
+		if (x - 1 > 0 and y + 1 < self.height and self.binary[y + 1][x - 1] == 8) or (x + 1 < self.width and y - 1 > 0 and self.binary[y - 1][x + 1] == 8): #left top to down right
 			while x - 1 > 0 and y + 1 < self.height and self.binary[t_x][t_y] == 8:
 				t_x -= 1
 				t_y += 1
 				count += 1
-			while x + 1 < self.width and y - 0 > 0 and self.binary[tt_x][tt_y] == 8:
-				tt_x += 1
-				tt_y -= 1
+			t_y = y
+			t_x = x
+			while x + 1 < self.width and y - 1 > 0 and self.binary[t_x][t_y] == 8:
+				t_x += 1
+				t_y -= 1
 				count += 1
 			if count == self.win_lenght:
 				print(x) #win
 				return 1
-			
+		if (x - 1 < self.width and y - 1 < self.height and self.binary[y - 1][x - 1] == 8) or (x + 1 < self.width and y + 1 < self.height and self.binary[y + 1][x + 1] == 8): #right down to top left
+			while x - 1 > 0 and y - 1 > 0 and self.binary[t_x][t_y] == 8:
+				t_x -= 1
+				t_y += 1
+				count += 1
+			t_y = y
+			t_x = x
+			while x + 1 < self.width and y + 1 < self.height and self.binary[t_x][t_y] == 8:
+				t_x += 1
+				t_y -= 1
+				count += 1
+			if count == self.win_lenght:
+				print(x) #win
+				return 1
 		return 0
 
 	def binary_mask(self):
@@ -150,6 +141,26 @@ class Game(object):
 			for x in range(0, self.width):
 				if self.binary[y][x] == 9:
 					
+					 # Find top and project line to the top
+					for i in range(0, self.win_length):
+						# Check for a O
+						if y - i >= 0 and self.binary[y - i][x] == 8:
+							break
+
+						# Fill with score at y + win_length
+						if y - i >= 0 and self.binary[y - i][x] >= 0 and self.binary[y - i][x] <= 3:
+
+							# Project at y + win_length - 1
+							occurence = 0
+							for j in range(y - self.win_length + 1, y, 1):
+								if j >= 0 and self.binary[j][x] >= 0 and self.binary[j][x] <= 3:
+									occurence += 1
+							if occurence >= 1 and self.binary[y - 1][x] != 9:
+								# Project at x + win_length - occurence
+								for j in range(y - occurence, y, 1):
+									self.binary[j][x] = y - j
+								break
+
 					# Find right and project line to right
 					for i in range(0, self.win_length):
 						# Check for a O
@@ -158,61 +169,86 @@ class Game(object):
 					
 						# Fill with score start at x + win_length
 						if x + i < self.width and self.binary[y][x + i] >= 0 and self.binary[y][x + i] <= 3:
-							print(self.binary[y][x + i])
+							
 							# Project at x + win_length - 1
 							occurence = 0
 							for j in range(x + self.win_length - 1, x, -1):
-								if self.binary[y][j] >= 0 and self.binary[y][j] <= 3:
+								if j < self.width and self.binary[y][j] >= 0 and self.binary[y][j] <= 3:
+									occurence += 1
+
+							if occurence >= 1 and self.binary[y][x - 1] != 9:
+							# Project at x + win_length - occurence
+								for j in range(x + occurence, x, -1):
+									if self.binary[y][j] == 9:
+										break
+									self.binary[y][j] = j - x
+								break
+									
+			
+					
+					# Find left and project line to left
+					for i in range(x, 0, -1):
+						# Check for a O
+						if x - i >= 0 and self.binary[y][x - i] == 8:
+							break
+						
+						# Fill with score start at x - win_length
+						if x - i >= 0 and self.binary[y][x - i] >= 0 and self.binary[y][x - i] <= 3:
+							
+							# Project at x + win_length - 1
+							occurence = 0
+							for j in range(x - self.win_length + 1, x, 1):
+								if j >= 0 and self.binary[y][j] >= 0 and self.binary[y][j] <= 3:
 									occurence += 1
 							
-							if occurence >= 1:
+							if occurence >= 1 and self.binary[y][x + 1] != 9:
 							# Project at x + win_length - occurence
-								for j in range(x + self.win_length - occurence + 1, x, -1):
-									if self.binary[y][j] != 9:
-										self.binary[y][j] = j - x
+								for j in range(x - occurence, x, 1):
+									if self.binary[y][j] == 9:
+										break
+									self.binary[y][j] = x - j
+								break
 					
 								
-								
-							
-
+	
 
 					# Find diagonale right and project line to diagonale right
-					for i in range(0, self.win_length):
-						return 1
+					# for i in range(0, self.win_length):
+					# 	return 1
 					
 		return 1
 		
 
 
-	# # Return an array with each occurence of potential defense, if tab is empty -> switch to attack occurence
-	# def find_occurences_defense(self):
-	# 	defenses = []
+#count = 0
+		#t_y = y
+		#t_x = x
+		#tt_y = y
+		#tt_x = x
+		#		
+		#if x - 1 < self.width and self.binary[y][x - 1] == 8: #left to right
+		#	while x - 1 > 0 and self.binary[y][t_x] == 8: #left
+		#		t_x -= 1
+		#		count += 1
+		#	while x + 1  < self.width and self.binary[y][tt_x] == 8: #right
+		#		tt_x += 1 
+		#		count += 1
+		#	if count == self.win_lenght:
+		#		print(x) #win
+		#		return 1
+		#count = 0
+		#t_y = y
+		#t_x = x
+		#tt_y = y
+		#tt_x = x
 
-	# 	occurence = []
-	# 	for y in range(self.max_height, self.height):
-	# 		for x in range(0, self.width):
-	# 			if self.tab[y][x] == '2':
-	# 				if find_end_occurence(x, y) == -1:
-	# 					continue 
-					
-	# 				return 0
-	
-
-	# 	return 0
-
-	# # Try to find an occurence with winning length
-	# def find_end_occurence(self, x, y):
-	# 	occurence = []
-
-	# 	start = 0
-	# 	end = 0
-	# 	orentation ='
-	# 	# Check length of potential occurence
-	# 	if self.height - y < self.win_length:
-	# 		return -1
-
-	# 	# Right search
-	# 	for i in range(0, self.win_length):
-	# 		if 
-
-	# 	return 0                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+		#if y - 1 > 0 and self.tab[y - 1][x] == 8: #down to top
+		#	while y - 1 > 0 and self.binary[t_y][x] == 8: #down
+		#		t_y -= 1
+		#		count += 1
+		#	while y + 1 < self.height and self.binary[tt_y][x] == 8: #top
+		#		tt_y += 1
+		#		count += 1
+		#	if count == self.win_lenght:
+		#		print(x) #win
+		#		return 1
