@@ -17,9 +17,9 @@
 ````
 
 ## Tools :
+ > - [Subject](https://gitlab.com/guhernan/rush02-player-open.git) <br />
  > - [norminette](https://github.com/42School/norminette) <br />
  > - [Makefile](https://nicomedes.assistedcoding.eu/#/app/makefilegen) <br />
- > - [Subject](https://gitlab.com/guhernan/rush02-player-open.git) <br />
 
 ## (づ｡◕‿‿◕｡)づ :
 ```
