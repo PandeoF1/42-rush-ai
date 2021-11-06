@@ -13,6 +13,5 @@ class Game(object):
         return 1
 
 
-
 game = Game(size=1000)
 game.basic_func(42)
