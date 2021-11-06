@@ -17,29 +17,29 @@ def printer(value):
 
 # Main function
 def main():
-	print(str(os.getpid())+ "\n", file=sys.stderr)
-	# = open("log.txt", "a")
-	# width = input()
-	# f.write("Input width : " + str(width))
-	# height = input()
-	# f.write("Input height : " + str(height))
-	# win_length = input()
-	# f.write("Input win_length : " + str(win_length))
-	# play_order = input()
-	# f.write("Input play_order : " + str(play_order))
-	# game_status = 1
-	# g_time = input()
-	# f.write("Input g_time : " + str(g_time))
-	# t_time = input()
-	# f.write("Input t_time : " + str(t_time))
-	# f.close()
-	width = 10
-	height = 10
-	win_length = 4
-	play_order = 2
+	# print(str(os.getpid())+ "\n", file=sys.stderr)
+	f = open("log.txt", "a")
+	width = input()
+	f.write("Input width : " + str(width))
+	height = input()
+	f.write("Input height : " + str(height))
+	win_length = input()
+	f.write("Input win_length : " + str(win_length))
+	play_order = input()
+	f.write("Input play_order : " + str(play_order))
 	game_status = 1
-	g_time = 100000
-	t_time = 1000
+	g_time = input()
+	f.write("Input g_time : " + str(g_time))
+	t_time = input()
+	f.write("Input t_time : " + str(t_time))
+	f.close()
+	# width = 10
+	# height = 10
+	# win_length = 4
+	# play_order = 2
+	# game_status = 1
+	# g_time = 100000
+	# t_time = 1000
 	# TODO :
 	#   . Creation of tab
 
@@ -60,7 +60,7 @@ def main():
 			game.put_in_tab(int(x), int(play_order))
 		
 		game.binary_mask(game.binary_a)
-		game.binary_mask(game.binary_d)
+		# game.binary_mask(game.binary_d)
 		game.show_tab_binary()
 		game.place_point()
 		time.sleep(int(t_time) / 1000)

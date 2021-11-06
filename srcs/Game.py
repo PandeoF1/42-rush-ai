@@ -4,6 +4,9 @@ import sys
 # 9 -> Nous
 
 # TODO : supprimer la fonction place_point et tout faire dans la meme boucle, des qu'on pose un 1, on check direct si c'est un winning move -> si oui on le pose
+# TODO : dans place_point, implementer pour savoir les is_winning de l'adversaire et les contrer inevitablement
+# TODO : optimisation possible quand on trouve un 1, on cherche la len de 9 si on pose un (pour eviter de poser un point a chaque fois qu'on trouve le premier 1)
+# TODO : grosse optimisation sur binary_a et binary_d qu'on traine partout -> eviter de trainer des copies dans chaque fonction et faire ca nativament
 
 
 class Game(object):
@@ -271,7 +274,7 @@ class Game(object):
 
 	def find_cost_below_right(self, x, y, tab):
 		cost = 0
-		print("debug le y = " + str(x))
+		
 		# Optimisation, instant return cost if y - 1 == 9
 		if x <= self.width - 1 and y - 1 >= 0 and y - 1 <= self.height - 1 and (tab[y - 1][x] == 9 or tab[y - 1][x] == 8):
 			return 1
@@ -282,7 +285,7 @@ class Game(object):
 				cost += 1
 
 		# Add precedent cost from previous coordinates
-		if tab[y + 1][x - 1] != 9:
+		if y + 1 <= self.height - 1 and x - 1 >= 0 and (tab[y + 1][x - 1] != 9 or tab[y + 1][x - 1] != 8):
 			cost = cost + tab[y + 1][x - 1]
 
 		if cost >= 8:
@@ -302,7 +305,7 @@ class Game(object):
 				cost += 1
 
 		# Add precedent cost from previous coordinates
-		if tab[y - 1][x + 1] != 9:
+		if y - 1 >= 0 and x + 1 <= self.width - 1 and tab[y - 1][x + 1] != 9:
 			cost = cost + tab[y - 1][x + 1]
 
 		if cost >= 8:
