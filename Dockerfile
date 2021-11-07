@@ -1,10 +1,15 @@
-FROM alpine:latest
+FROM python:latest
 
+### Mandatory
+#
+WORKDIR /app
+#
+RUN adduser player && chown -R player /app
+#
+USER player
+#############
 
-RUN apk add --no-cache --upgrade bash && apk add --update python3
+COPY . /app/
 
-WORKDIR .
-
-COPY . .
-
-RUN /bin/bash
+# Run a little script : the /bin/bash maintain the container running
+CMD ["python3", "/app/srcs/main.py"]
