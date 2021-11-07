@@ -1,5 +1,6 @@
 import sys
 import math
+import random
 
 # TOP DEFENCE - OK
 # TOP WIN - OK
@@ -32,7 +33,7 @@ class Game(object):
 		return (self.game_status)
 
 	def create_tab(self):  # DONE
-		
+
 		for _ in range(0, self.height):
 			line = []
 			for i in range(0, self.width):
@@ -47,9 +48,8 @@ class Game(object):
 		matrix = []
 		for r in range(0, self.height):
 			matrix.append([0 for c in range(0, self.width)])
-	
-		return matrix
 
+		return matrix
 
 		# for _ in range(0, self.height):
 		# 	line = []
@@ -119,12 +119,11 @@ class Game(object):
 			# print(str(n) + "\n")
 		if self.tab[n][width] != 0:
 			n -= 1
-		
-		
+
 		self.tab[n][width] = player
 		self.binary_a[n][width] = player
 		self.binary_d[n][width] = player
-			
+
 		if n > self.max_height:
 			self.max_height = n
 		# self.show_tab_binary()
@@ -324,7 +323,7 @@ class Game(object):
 
 						# Fill with score start at x + win_length
 						if x + i < self.width and tab[y][x + i] >= 0 and tab[y][x + i] <= 7:
-							
+
 							cell = False
 							# Check above the cell
 							if y == self.height - 1:
@@ -333,7 +332,7 @@ class Game(object):
 								cell = True
 
 							# Project at x + i (right)
-							if x + i < self.width and tab[y][x + i] >=0 and tab[y][x + i] <= 7:
+							if x + i < self.width and tab[y][x + i] >= 0 and tab[y][x + i] <= 7:
 								if cell:
 									# print('jecris sur la cell : ' + str(tab[y][x + i]))
 									tab[y][x + i] = 1
@@ -351,20 +350,15 @@ class Game(object):
 							# Check above the cell
 							if y == self.height - 1:
 								cell = True
-							elif y + 1 < self.height and x - i <= 0 and (tab[y + 1][x - i] == 8 or tab[y + 1][x - i] == 9):
+							elif y + 1 < self.height and x - i >= 0 and (tab[y + 1][x - i] == 8 or tab[y + 1][x - i] == 9):
 								cell = True
 
 							# Project at x - i
 							if x - i >= 0 and tab[y][x - i] >= 0 and tab[y][x - i] <= 7:
-
+								#print('value de cell = ' + str(cell))
 								if cell:
 									tab[y][x - i] = 1
 								break
-
-
-
-
-
 
 							# # Project at x + win_length - 1
 							# occurence = 0
@@ -386,11 +380,11 @@ class Game(object):
 							# 	break
 		return 1
 
-
-
 	# Search for a winning point or a 1 defense
-	def place_point(self):
 
+	def place_point(self):
+		ones_ally = []
+		ones_enemy = []
 		# If the game start place a point in the middle
 		if self.start == True:
 			# self.binary_a[self.height - 1][int(self.width / 2)] = 9
@@ -403,21 +397,36 @@ class Game(object):
 			for x in range(0, self.width):
 				if self.binary_a[y][x] == 1:
 					if self.is_winning(y, x) == 1:
+						ones_enemy.append(x)
 						exit(1)
 
 		# Find winning enemy point
 		for y in range(0, self.height):
 			for x in range(0, self.width):
 				if self.binary_d[y][x] == 1:
+					ones_ally.append(x)
 					if self.is_defeat(y, x) == 1:
 						self.put_in_tab(x, 9)
 						return
 
-		# Choose correct 1 possibility
+		# rand = random.randrange(0, len(ones_ally))
+		# # Random choose for our points
+		# for x in range(0, len(ones_ally)):
+		# 	if x == rand:
+		# 		print(x)
+		# 		self.put_in_tab(int(x), 9)
+		# 		return
+
+		# rand = random.randrange(0, self.width)
+		# # Random choose for their points
+		# for x in range(0, self.width):
+		# 	if x == rand:
+		# 		print(x)
+		# 		self.put_in_tab(int(x), 9)
+		# 		return
 		for y in range(0, self.height):
 			for x in range(0, self.width):
 				if self.binary_a[y][x] == 1:
 					print(x)
 					self.put_in_tab(int(x), 9)
 					return
-
