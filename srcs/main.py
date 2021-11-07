@@ -51,6 +51,8 @@ def main():
 		if play_order == '2':
 			try:
 				x = input()
+				if (x == ''):
+					x = input()
 			except EOFError:
 				f.close()
 				return	

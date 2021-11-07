@@ -1,0 +1,158 @@
+
+					# # Find diagonale right and project line to diagonale right
+					# if y >= self.win_length - 1 and self.width - x >= self.win_length - 1:
+					# 	for i in range(0, self.win_length):
+					# 		# Check for a O
+					# 		if x + i < self.width and y - i >= 0 and tab[y - i][x + i] == target2:
+					# 			break
+
+					# 		# Search for valid value
+					# 		if x + i < self.width and y - i >= 0 and tab[y - i][x + i] >= 0 and tab[y - i][x + i] <= 7:
+
+					# 			# Project at x + win_length
+					# 			occurence = 0
+					# 			for j in range(0, self.win_length - 1):
+					# 				if x + i < self.width and y - i >= 0 and tab[y - i][x + i] >= 0 and tab[y - i][x + i] <= 7:
+					# 					occurence += 1
+					# 			if occurence >= 1:
+					# 				# Project at x + occurence and y - occurence
+					# 				for j in range(occurence - 1, 0, -1):
+					# 					if tab[y - j][x + j] != 9 and tab[y - j][x + j] != 8:
+					# 						cost = self.find_cost_below_right(x + j, y - j, tab)
+					# 						# print('l')
+					# 						if cost == 1:
+					# 							if self.is_winning(y - j, x + j):
+					# 								exit(1)
+					# 							else:
+					# 								tab[y - j][x + j] = cost
+
+					# # Find diagonale left and project line to diagonale left
+					# if y >= self.win_length - 1 and x >= self.win_length - 1:
+					# 	for i in range(0, self.win_length):
+					# 		# Check for a O
+					# 		if x - i >= 0 and y - i >= 0 and tab[y - i][x - i] == 8:
+					# 			break
+
+					# 		# Search for valid value
+					# 		if x - i >= 0 and y - i >= 0 and tab[y - i][x - i] >= 0 and tab[y - i][x - i] <= 7:
+
+					# 			# Project at x - win_length
+					# 			occurence = 0
+					# 			for j in range(0, self.win_length - 1):
+					# 				if x - i >= 0 and y - i >= 0 and tab[y - i][x - i] >= 0 and tab[y - i][x - i] <= 7:
+					# 					occurence += 1
+
+					# 			if occurence >= 1:
+					# 				# Project at x - occurence and y - occurence
+					# 				for j in range(occurence - 1, 0, -1):
+					# 					if tab[y - j][x - j] != 9 and tab[y - j][x - j] != 8:
+					# 						cost = self.find_cost_below_right(x + j, y - j, tab)
+					# 						if cost == 1:
+					# 							if self.is_winning(y - j, x - j):
+					# 								exit(1)
+					# 							else:
+					# 								tab[y - j][x - j] = cost
+
+		return 1
+
+	# Define the cost for diagonale line
+
+	def find_cost_below_right(self, x, y, tab):
+		cost = 0
+		
+		# Optimisation, instant return cost if y - 1 == target
+		if x <= self.width - 1 and y - 1 >= 0 and y - 1 <= self.height - 1 and (tab[y - 1][x] == 9 or tab[y - 1][x] == 8):
+			return 1
+
+		# Search below the given coordinates
+		for i in range(0, self.height - y):
+			if x <= self.width - 1 and y - 1 >= 0 and y - 1 <= self.height - 1 and tab[self.height - i - 1][x] != 9 and tab[self.height - i - 1][x] != 8:
+				cost += 1
+
+		# Add precedent cost from previous coordinates
+		if y + 1 <= self.height - 1 and x - 1 >= 0 and (tab[y + 1][x - 1] != 9 or tab[y + 1][x - 1] != 8):
+			cost = cost + tab[y + 1][x - 1]
+
+		if cost >= 8:
+			return 7
+		return cost
+
+	def find_cost_below_left(self, x, y, tab):
+		cost = 0
+
+		# Optimisation, instant return cost if y - 1 == 9
+		if tab[y + 1][x] == 9 or tab[y + 1][x] == 8:
+			return 1 
+
+		# Search below the given coordinates
+		for i in range(0, self.height - y):
+			if tab[self.height + i - 1][x] != 9 and tab[self.height + i - 1][x] != 8:
+				cost += 1
+
+		# Add precedent cost from previous coordinates
+		if y - 1 >= 0 and x + 1 <= self.width - 1 and tab[y - 1][x + 1] != 9:
+			cost = cost + tab[y - 1][x + 1]
+
+		if cost >= 8:
+			return 7
+
+		return cost
+
+
+
+
+                #count = 0
+                #t_y = y
+                #t_x = x
+                #tt_y = y
+                #tt_x = x
+                #
+                # if x - 1 < self.width and self.binary[y][x - 1] == 8: #left to right
+                #	while x - 1 > 0 and self.binary[y][t_x] == 8: #left
+                #		t_x -= 1
+                #		count += 1
+                #	while x + 1  < self.width and self.binary[y][tt_x] == 8: #right
+                #		tt_x += 1
+                #		count += 1
+                #	if count == self.win_lenght:
+                #		print(x) #win
+                #		return 1
+                #count = 0
+                #t_y = y
+                #t_x = x
+                #tt_y = y
+                #tt_x = x
+
+                # if y - 1 > 0 and self.tab[y - 1][x] == 8: #down to top
+                #	while y - 1 > 0 and self.binary[t_y][x] == 8: #down
+                #		t_y -= 1
+                #		count += 1
+                #	while y + 1 < self.height and self.binary[tt_y][x] == 8: #top
+                #		tt_y += 1
+                #		count += 1
+                #	if count == self.win_lenght:
+                #		print(x) #win
+                #		return 1
+
+
+
+
+
+# if y - 1 > 0 and (self.binary_d[y - 1][x] == 8): #Useless
+        #	print("down")
+        #	while t_y - 1 > 0 and self.binary_d[t_y - 1][x] == 8:  # down
+        #		t_y -= 1
+#count += 1
+        # top to down verif
+
+# if y - 1 > 0 and (self.binary_a[y - 1][x] == 9): #Useless
+        #	print("down")
+        #	while t_y - 1 > 0 and self.binary_a[t_y - 1][x] == 9:  # down
+        #		t_y -= 1
+#count += 1
+
+
+                                        # if cost <= 2 and y == self.height - 1:
+                                        # 	tab[y][j] = j - x
+                                        # else:
+                                        # 	tab[y][j] = cost
