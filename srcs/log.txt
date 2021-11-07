@@ -1,7 +1,5 @@
-Input width : 10
-Input height : 10
-Input win_length : 2
-Input play_order : 1
-Input g_time : 100
-Input t_time : 100
-Player input : 1
+(2) Notre tours :)
+(2) Player input : 2
+(1) Notre tours :)
+(2) Player input : 5
+(1) Notre tours :)

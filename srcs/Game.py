@@ -37,16 +37,42 @@ class Game(object):
 	def create_tab_binary(self):  # DONE
 		for _ in range(0, self.height):
 			line = []
+			line1 = []
 			for i in range(0, self.width):
 				line.append(0)
+				line1.append(0)
 			self.binary_a.append(line)
-			self.binary_d.append(line)
+			self.binary_d.append(line1)
 
 	def show_tab(self):  # DONE (debug)
 		for i in range(0, self.height):
 			print(self.tab[i], file=sys.stderr)
 
 	def show_tab_binary(self):  # DONE (debug)
+		print("\033[;31m DEFENSIVE !\033[;0m", file=sys.stderr)
+		for i in range(0, self.height):
+			print('', file=sys.stderr)
+			for j in range(0, self.width):
+				if self.binary_d[i][j] == 9:
+					print("\033[;34m" + str(self.binary_d[i][j]) +
+						  "\033[;0m", file=sys.stderr, end=' ')
+				elif self.binary_d[i][j] == 1:
+					print("\033[;32m" + str(self.binary_d[i][j]) +
+						  "\033[;0m", file=sys.stderr, end=' ')
+				elif self.binary_d[i][j] == 2:
+					print("\033[;33m" + str(self.binary_d[i][j]) +
+						  "\033[;0m", file=sys.stderr, end=' ')
+				elif self.binary_d[i][j] == 8:
+					print("\033[;35m" + str(self.binary_d[i][j]) +
+						  "\033[;0m", file=sys.stderr, end=' ')
+				elif self.binary_d[i][j] >= 3 and self.binary_d[i][j] <= 7:
+					print("\033[;31m" + str(self.binary_d[i][j]) +
+						  "\033[;0m", file=sys.stderr, end=' ')
+				else:
+					print(self.binary_d[i][j], file=sys.stderr, end=' ')
+		print('\n', file=sys.stderr)
+
+		print("\033[;31m ATTACK !\033[;0m", file=sys.stderr)
 		for i in range(0, self.height):
 			print('', file=sys.stderr)
 			for j in range(0, self.width):
@@ -58,6 +84,9 @@ class Game(object):
 						  "\033[;0m", file=sys.stderr, end=' ')
 				elif self.binary_a[i][j] == 2:
 					print("\033[;33m" + str(self.binary_a[i][j]) +
+						  "\033[;0m", file=sys.stderr, end=' ')
+				elif self.binary_a[i][j] == 8:
+					print("\033[;35m" + str(self.binary_a[i][j]) +
 						  "\033[;0m", file=sys.stderr, end=' ')
 				elif self.binary_a[i][j] >= 3 and self.binary_a[i][j] <= 7:
 					print("\033[;31m" + str(self.binary_a[i][j]) +
@@ -73,8 +102,9 @@ class Game(object):
 			# print(str(n) + "\n")
 		if self.tab[n][width] != 0:
 			n -= 1
-		self.tab[n][width] = 8
-		self.binary_d[n][width] = 8
+		self.tab[n][width] = player
+		self.binary_a[n][width] = player
+		self.binary_d[n][width] = player
 		if n > self.max_height:
 			self.max_height = n
 
@@ -242,16 +272,16 @@ class Game(object):
 		return 0
 
 
-	def binary_mask(self, tab):
+	def binary_mask(self, tab, target, target2):
 		# Parcours le binary mask
 		for y in range(self.max_height - 1, self.height):
 			for x in range(0, self.width):
-				if tab[y][x] == 9:
+				if tab[y][x] == target:
 
 					# Find top and project line to the top
 					for i in range(0, self.win_length):
 						# Check for a O
-						if y - i >= 0 and tab[y - i][x] == 8:
+						if y - i >= 0 and tab[y - i][x] == target2:
 							break
 
 						# Fill with score at y + win_length
@@ -276,7 +306,7 @@ class Game(object):
 					# Find right and project line to right
 					for i in range(0, self.win_length):
 						# Check for a O
-						if x + i < self.width and tab[y][x + i] == 8:
+						if x + i < self.width and tab[y][x + i] == target2:
 							break
 
 						# Fill with score start at x + win_length
@@ -293,6 +323,7 @@ class Game(object):
 								for j in range(x + occurence, x, -1):
 									if tab[y][j] != 9 and tab[y][j] != 8:
 										cost = self.find_cost_below(j - x,  y, tab, x)
+										print('le cost = ' + str(cost) + ' et le x = ' + str(x))
 										if cost == 1:
 											if self.is_winning(y, j):
 												exit(1)
@@ -306,7 +337,7 @@ class Game(object):
 					# Find left and project line to left
 					for i in range(x, 0, -1):
 						# Check for a O
-						if x - i >= 0 and tab[y][x - i] == 8:
+						if x - i >= 0 and tab[y][x - i] == target2:
 							break
 
 						# Fill with score start at x - win_length
@@ -335,7 +366,7 @@ class Game(object):
 					# if y >= self.win_length - 1 and self.width - x >= self.win_length - 1:
 					# 	for i in range(0, self.win_length):
 					# 		# Check for a O
-					# 		if x + i < self.width and y - i >= 0 and tab[y - i][x + i] == 8:
+					# 		if x + i < self.width and y - i >= 0 and tab[y - i][x + i] == target2:
 					# 			break
 
 					# 		# Search for valid value
@@ -392,7 +423,7 @@ class Game(object):
 	def find_cost_below_right(self, x, y, tab):
 		cost = 0
 		
-		# Optimisation, instant return cost if y - 1 == 9
+		# Optimisation, instant return cost if y - 1 == target
 		if x <= self.width - 1 and y - 1 >= 0 and y - 1 <= self.height - 1 and (tab[y - 1][x] == 9 or tab[y - 1][x] == 8):
 			return 1
 
@@ -458,28 +489,29 @@ class Game(object):
 		if self.start == True:
 			self.binary_a[self.height - 1][int(self.width / 2)] = 9
 			print(int(self.width / 2))
+			self.put_in_tab(int(self.width / 2), 9)
 			self.start = False
 
 		# Find a winning point
-		for y in range(self.max_height - 1, self.height):
+		for y in range(0, self.height):
 			for x in range(0, self.width):
 				if self.binary_a[y][x] == 1:
 					if self.is_winning(y, x) == 1:
 						exit(1)
 
 		# Find winning enemy point
-		for y in range(self.max_height - 1, self.height):
+		for y in range(0, self.height):
 			for x in range(0, self.width):
 				if self.binary_d[y][x] == 1:
 					if self.is_defeat(y, x) == 1:
 						return
 
 		# Choose correct 1 possibility
-		for y in range(self.max_height - 1, self.height):
+		for y in range(0, self.height):
 			for x in range(0, self.width):
-				if self.binary_a[y][x] == 1	:
-					self.binary_a[y][x] = 9
+				if self.binary_a[y][x] == 1:
 					print(x)
+					self.put_in_tab(int(x), 9)
 					return
 
 
