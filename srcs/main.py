@@ -12,10 +12,10 @@ def main():
 	print(str(os.getpid())+ "\n", file=sys.stderr)
 	f = open("log.txt", "w")
 	if len(sys.argv) == 2:
-		width = 10
-		height = 10
+		width = 7
+		height = 6
 		win_length = 4
-		play_order = 2
+		play_order = 1
 		game_status = 1
 		g_time = 100000
 		t_time = 1000
@@ -38,8 +38,8 @@ def main():
 	#   . Creation of tab
 
 	game = Game(height, width, win_length, g_time, t_time, game_status)
-	game.create_tab()
-	game.create_tab_binary()
+	# game.create_tab()
+	# game.create_tab_binary()
 	f = open("log.txt", "a")
 	while game.game_status:
 		with open('status.txt') as file: # Force quit
@@ -66,7 +66,9 @@ def main():
 		if play_order == '1':
 			game.place_point()
 		game.binary_mask(game.binary_a, 9, 8)
-		game.show_tab_binary()
+		if len(sys.argv) == 2:
+			game.show_tab_binary()
+		# game.show_tab()
 		#if int(t_time) >= 1:
 		#	time.sleep(int(t_time) / 1000)
 

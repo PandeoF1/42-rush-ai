@@ -22,31 +22,43 @@ class Game(object):
 		self.t_time = int(t_time)  # Total time
 		self.g_time = int(g_time)  # Gain time per round
 		self.game_status = int(game_status)  # 0 = in progress / 1 = finish
-		self.tab = []
+		self.tab = self.create_tab_binary()
 		self.max_height = 0
-		self.binary_a = []
-		self.binary_d = []
+		self.binary_a = self.create_tab_binary()
+		self.binary_d = self.create_tab_binary()
 		self.start = True
 
 	def status(self):  # DONE
 		return (self.game_status)
 
 	def create_tab(self):  # DONE
+		
 		for _ in range(0, self.height):
 			line = []
 			for i in range(0, self.width):
 				line.append(0)
 			self.tab.append(line)
 
+	def show_tab(self):
+		for x in range(0, self.height):
+			print(self.tab[x])
+
 	def create_tab_binary(self):  # DONE
-		for _ in range(0, self.height):
-			line = []
-			line1 = []
-			for i in range(0, self.width):
-				line.append(0)
-				line1.append(0)
-			self.binary_a.append(line)
-			self.binary_d.append(line1)
+		matrix = []
+		for r in range(0, self.height):
+			matrix.append([0 for c in range(0, self.width)])
+	
+		return matrix
+
+
+		# for _ in range(0, self.height):
+		# 	line = []
+		# 	line1 = []
+		# 	for i in range(0, self.width):
+		# 		line.append(0)
+		# 		line1.append(0)
+		# 	matrix.append(line)
+		# 	self.binary_d.append(line1)
 
 	def show_tab(self):  # DONE (debug)
 		for i in range(0, self.height):
@@ -100,17 +112,22 @@ class Game(object):
 		print('\n', file=sys.stderr)
 
 	def put_in_tab(self, width, player):  # DONE
+		# self.show_tab_binary()
 		n = 0
 		while self.tab[n][width] == 0 and n < self.height - 1:
 			n += 1
 			# print(str(n) + "\n")
 		if self.tab[n][width] != 0:
 			n -= 1
+		
+		
 		self.tab[n][width] = player
 		self.binary_a[n][width] = player
 		self.binary_d[n][width] = player
+			
 		if n > self.max_height:
 			self.max_height = n
+		# self.show_tab_binary()
 
 	def is_winning(self, y, x):
 		t_y = y
@@ -126,7 +143,6 @@ class Game(object):
 		t_x = x
 		# top to down verif
 		if count == self.win_length:
-			print("t une merde")
 			print(x)  # win
 			return 1
 		count = 0
@@ -264,10 +280,8 @@ class Game(object):
 				t_y += 1
 				count += 1
 		if count == self.win_length - 1:
-			print("t une merde")
 			print(x)  # win
 			return 1
-		print("Not dead")
 		return 0
 
 	def binary_mask(self, tab, target, target2):
@@ -298,6 +312,7 @@ class Game(object):
 										if self.is_winning(j, x):
 											exit(1)
 										else:
+											# print('jecris sur la cell : ' + str(tab[j][x]))
 											tab[j][x] = y - j
 								break
 
@@ -309,106 +324,76 @@ class Game(object):
 
 						# Fill with score start at x + win_length
 						if x + i < self.width and tab[y][x + i] >= 0 and tab[y][x + i] <= 7:
+							
+							cell = False
+							# Check above the cell
+							if y == self.height - 1:
+								cell = True
+							elif y + 1 < self.height and x + i < self.width and (tab[y + 1][x + i] == 8 or tab[y + 1][x + i] == 9):
+								cell = True
 
-							# Project at x + win_length - 1
-							occurence = 0
-							for j in range(x + self.win_length - 1, x, -1):
-								if j < self.width and tab[y][j] >= 0 and tab[y][j] <= 7:
-									occurence += 1
-
-							if occurence >= 1:
-								# Project at x + win_length - occurence
-								for j in range(x + occurence, x, -1):
-									if tab[y][j] != 9 and tab[y][j] != 8:
-										if (initial + x) - initial >= 2:
-							return 0
-						else:
-							return 1
-										# cost = self.find_cost_below_rigth(
-										# 	j - x,  y, tab, x)
-										cost = 0
-										# print('le cost = ' + str(cost) + ' et le x = ' + str(x))
-										if cost == 1:
-											if self.is_winning(y, j):
-												exit(1)
-											else:
-												tab[y][j] = cost
+							# Project at x + i (right)
+							if x + i < self.width and tab[y][x + i] >=0 and tab[y][x + i] <= 7:
+								if cell:
+									# print('jecris sur la cell : ' + str(tab[y][x + i]))
+									tab[y][x + i] = 1
+								break
 
 					# Find left and project line to left
-					for i in range(x, 0, -1):
+					for i in range(0, self.win_length):
 						# Check for a O
 						if x - i >= 0 and tab[y][x - i] == target2:
 							break
 
 						# Fill with score start at x - win_length
 						if x - i >= 0 and tab[y][x - i] >= 0 and tab[y][x - i] <= 7:
+							cell = False
+							# Check above the cell
+							if y == self.height - 1:
+								cell = True
+							elif y + 1 < self.height and x - i <= 0 and (tab[y + 1][x - i] == 8 or tab[y + 1][x - i] == 9):
+								cell = True
 
-							# Project at x + win_length - 1
-							occurence = 0
-							for j in range(x - self.win_length + 1, x, 1):
-								if j >= 0 and tab[y][j] >= 0 and tab[y][j] <= 7:
-									occurence += 1
+							# Project at x - i
+							if x - i >= 0 and tab[y][x - i] >= 0 and tab[y][x - i] <= 7:
 
-							if occurence >= 1:
-								# Project at x + win_length - occurence
-								for j in range(x - occurence, x, 1):
-									if tab[y][j] != 9 and tab[y][j] != 8:
-										
-										cost = self.find_cost_below_left(x - j, y, tab, x)
-										print('prix du cost = ' + str(cost))
-										if cost == 1:
-											if self.is_winning(y, j):
-												exit(1)
-											else:
-												tab[y][j] = cost
+								if cell:
+									tab[y][x - i] = 1
 								break
+
+
+
+
+
+
+							# # Project at x + win_length - 1
+							# occurence = 0
+							# for j in range(x - self.win_length + 1, x, 1):
+							# 	if j >= 0 and tab[y][j] >= 0 and tab[y][j] <= 7:
+							# 		occurence += 1
+
+							# if occurence >= 1:
+							# 	# Project at x + win_length - occurence
+							# 	for j in range(x - occurence, x, 1):
+							# 		if tab[y][j] != 9 and tab[y][j] != 8:
+							# 			cost = self.find_cost_below_left(x - j, y, tab, x)
+							# 			print('prix du cost = ' + str(cost))
+							# 			if cost == 1:
+							# 				if self.is_winning(y, j):
+							# 					exit(1)
+							# 				else:
+							# 					tab[y][j] = cost
+							# 	break
 		return 1
 
-	def find_cost_below(self, x, y, tab, initial):
-		cost = 0
 
-		# if y + 1 < self.height
-
-		# Optimisation, instant return cost if y + 1 == 9 or 8
-		# if y + 1 < self.height and (tab[y + 1][x] == 9 or tab[y + 1][x] == 8):
-		# 	if initial >= 8:
-		# 		return 7
-		# 	else:
-		# 		return initial
-
-		# Search below the given coordinates
-		for i in range(0, self.height - y):
-			if tab[self.height - i - 1][x] != 9 and tab[self.height - i - 1][x] != 8:
-				cost += 1
-			else:
-				return cost
-
-		if (initial + x) - initial >= 2:
-			return 0
-		return cost
-
-
-	def find_cost_below_left(self, x, y, tab, initial):
-		cost = 0
-		print('pos initial = ' + str(initial))
-		# #for i in range(0, self.win_length - 1):
-		# if x - i >= 0 and tab[y][x - i] != 9 and tab[y][x - i] != 8:
-		# 		cost += 1
-		# 	else:
-		# 		return 0
-
-		if (initial + x) - initial >= 2:
-			return 0
-		else:
-			return 1
-		return cost
 
 	# Search for a winning point or a 1 defense
 	def place_point(self):
 
 		# If the game start place a point in the middle
 		if self.start == True:
-			self.binary_a[self.height - 1][int(self.width / 2)] = 9
+			# self.binary_a[self.height - 1][int(self.width / 2)] = 9
 			print(int(self.width / 2))
 			self.put_in_tab(int(self.width / 2), 9)
 			self.start = False

@@ -1,2 +1,9 @@
-(2) Notre tours :)
-(2) Player input : 3\ew
+(1) Notre tours :)
+(2) Player input : 1
+(1) Notre tours :)
+(2) Player input : 3
+(1) Notre tours :)
+(2) Player input : 4
+(1) Notre tours :)
+(2) Player input : 2
+(1) Notre tours :)
