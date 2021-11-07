@@ -78,72 +78,87 @@ class Game(object):
 			self.max_height = n
 
 	def is_winning(self, y, x):
+		print("On call is_winning at : " + str(x) + " and y : " + str(y))
+		print("Value at x y position : " + str(self.binary_a[y][x]))
+		print("Value at x - 1 | y position : " + str(self.binary_a[y][x-1]))
+		print("Value at x + 1 | y position : " + str(self.binary_a[y][x+1]))
+		print("Value at x y - | 1 position : " + str(self.binary_a[y- 1][x]))
+		
 		t_y = y
 		t_x = x
 		count = 0
 		# top to down
-		if y + 1 < self.height and y - 1 > 0 and (self.tab[y + 1][x] == 8 or self.tab[y - 1][x] == 8):
-			while y + 1 < self.height and self.binary_a[t_y][x] == 8:  # top
+		if y + 1 < self.height and (self.tab[y + 1][x] == 9):
+			print("top")
+			while y + 1 < self.height and self.binary_a[t_y + 1][x] == 9:  # top
 				t_y += 1
 				count += 1
-			t_y = y
-			t_x = x
-			while y - 1 > 0 and self.binary_a[t_y][x] == 8:  # down
-				t_y -= 1
-				count += 1
-			if count == self.win_length:
-				print(x)  # win
-				return 1
-		count = 0
 		t_y = y
 		t_x = x
-
-		# right to left
-		if x + 1 < self.width and x - 1 > 0 and (self.binary_a[y][x + 1] == 8 or self.binary_a[y][x - 1] == 8):
-			while x + 1 < self.width and self.binary_a[y][t_x] == 8:  # right
-				t_x += 1
-				count += 1
-			t_y = y
-			t_x = x
-			while x - 1 > 0 and self.binary_a[y][t_x] == 8:  # left
-				t_x -= 1
-				count += 1
-			if count == self.win_length:
-				print(x)  # win
-				return 1
-		count = 0
-		t_y = y
-		t_x = x
-		# left top to down right
-		if (x - 1 > 0 and y + 1 < self.height and self.binary_a[y + 1][x - 1] == 8) or (x + 1 < self.width and y - 1 > 0 and self.binary_a[y - 1][x + 1] == 8):
-			while x - 1 > 0 and y + 1 < self.height and self.binary_a[t_x][t_y] == 8:
-				t_x -= 1
-				t_y += 1
-				count += 1
-			t_y = y
-			t_x = x
-			while x + 1 < self.width and y - 1 > 0 and self.binary_a[t_x][t_y] == 8:
-				t_x += 1
+		if y - 1 > 0 and (self.tab[y - 1][x] == 9):
+			print("down")
+			while t_y - 1 > 0 and self.binary_a[t_y - 1][x] == 9:  # down
 				t_y -= 1
 				count += 1
 			if count == self.win_length:
+				print("Win at x : " + str(x) + " and y : " + str(y))
 				print(x)  # win
 				return 1
-		# right down to top left
-		if (x - 1 < self.width and y - 1 < self.height and self.binary_a[y - 1][x - 1] == 8) or (x + 1 < self.width and y + 1 < self.height and self.binary_a[y + 1][x + 1] == 8):
-			while x - 1 > 0 and y - 1 > 0 and self.binary_a[t_x][t_y] == 8:
-				t_x -= 1
-				t_y += 1
-				count += 1
-			t_y = y
-			t_x = x
-			while x + 1 < self.width and y + 1 < self.height and self.binary_a[t_x][t_y] == 8:
-				t_x += 1
-				t_y -= 1
-				count += 1
-			if count == self.win_length:
-				print(x)  # win
-				return 1
+		print("Count = " + str(count))
+		return 0
+		# count = 0
+		# t_y = y
+		# t_x = x
+		# # right to left
+		# if x + 1 < self.width and x - 1 > 0 and (self.binary_a[y][x + 1] == 8 or self.binary_a[y][x - 1] == 8):
+		# 	while x + 1 < self.width and self.binary_a[y][t_x] == 8:  # right
+		# 		t_x += 1
+		# 		count += 1
+		# 	t_y = y
+		# 	t_x = x
+		# 	while x - 1 > 0 and self.binary_a[y][t_x] == 8:  # left
+		# 		t_x -= 1
+		# 		count += 1
+		# 	if count == self.win_length:
+		# 		print("Win at x : " + str(x) + " and y : " + str(y))
+		# 		print(x)  # win
+		# 		return 1
+		# count = 0
+		# t_y = y
+		# t_x = x
+		# # left top to down right
+		# if (x - 1 > 0 and y + 1 < self.height and self.binary_a[y + 1][x - 1] == 8) or (x + 1 < self.width and y - 1 > 0 and self.binary_a[y - 1][x + 1] == 8):
+		# 	while x - 1 > 0 and y + 1 < self.height and self.binary_a[t_x][t_y] == 8:
+		# 		t_x -= 1
+		# 		t_y += 1
+		# 		count += 1
+		# 	t_y = y
+		# 	t_x = x
+		# 	while x + 1 < self.width and y - 1 > 0 and self.binary_a[t_x][t_y] == 8:
+		# 		t_x += 1
+		# 		t_y -= 1
+		# 		count += 1
+		# 	if count == self.win_length:
+		# 		print("Win at x : " + str(x) + " and y : " + str(y))
+		# 		print(x)  # win
+		# 		return 1
+		# # right down to top left
+		# if (x - 1 < self.width and y - 1 < self.height and self.binary_a[y - 1][x - 1] == 8) or (x + 1 < self.width and y + 1 < self.height and self.binary_a[y + 1][x + 1] == 8):
+		# 	while x - 1 > 0 and y - 1 > 0 and self.binary_a[t_x][t_y] == 8:
+		# 		t_x -= 1
+		# 		t_y += 1
+		# 		count += 1
+		# 	t_y = y
+		# 	t_x = x
+		# 	while x + 1 < self.width and y + 1 < self.height and self.binary_a[t_x][t_y] == 8:
+		# 		t_x += 1
+		# 		t_y -= 1
+		# 		count += 1
+		# 	if count == self.win_length:
+		# 		print("Win at x : " + str(x) + " and y : " + str(y))
+		# 		print(x)  # win
+		# 		return 1
+		# print("Ne gagne pas")
 		return 0
 
 	def binary_mask(self, tab):
@@ -169,6 +184,10 @@ class Game(object):
 							if occurence >= 1 and tab[y - 1][x] != 9 and tab[y - 1][x] != 8:
 								# Project at x + win_length - occurence
 								for j in range(y - occurence, y, 1):
+									# Check for winning place
+									if y - j == 1:
+										if self.is_winning(j, x):
+											exit(1)
 									tab[j][x] = y - j
 								break
 
@@ -192,6 +211,9 @@ class Game(object):
 								for j in range(x + occurence, x, -1):
 									if tab[y][j] != 9 and tab[y][j] != 8:
 										cost = self.find_cost_below(j - x,  y, tab)
+										if cost == 1:
+											if self.is_winning(y, j):
+												exit(1)
 										if cost <= 2 and y == self.height - 1:
 											tab[y][j] = j - x
 										else:
@@ -217,6 +239,9 @@ class Game(object):
 								for j in range(x - occurence, x, 1):
 									if tab[y][j] != 9 and tab[y][j] != 8:
 										cost = self.find_cost_below(x - j,  y, tab)
+										if cost == 1:
+											if self.is_winning(y, j):
+												exit(1)
 										if y == self.height - 1:
 											tab[y][j] = x - j
 										else:
@@ -242,8 +267,10 @@ class Game(object):
 									# Project at x + occurence and y - occurence
 									for j in range(occurence - 1, 0, -1):
 										if tab[y - j][x + j] != 9 and tab[y - j][x + j] != 8:
-											tab[y - j][x +
-															   j] = self.find_cost_below_right(x + j, y - j, tab)
+											tab[y - j][x + j] = self.find_cost_below_right(x + j, y - j, tab)
+											if tab[y - j][x + j] == 1:
+												if self.is_winning(y - j, x + j):
+													exit(1)
 
 					# Find diagonale left and project line to diagonale left
 					if y >= self.win_length - 1 and x >= self.win_length - 1:
@@ -265,8 +292,10 @@ class Game(object):
 									# Project at x - occurence and y - occurence
 									for j in range(occurence - 1, 0, -1):
 										if tab[y - j][x - j] != 9 and tab[y - j][x - j] != 8:
-											tab[y - j][x -
-															   j] = self.find_cost_below_right(x + j, y - j, tab)
+											tab[y - j][x - j] = self.find_cost_below_right(x + j, y - j, tab)
+											if tab[y - j][x - j] == 1:
+												if self.is_winning(y - j, x - j):
+													exit(1)
 
 		return 1
 
