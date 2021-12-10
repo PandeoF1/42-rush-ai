@@ -19,7 +19,7 @@
 ## Tools :
  > - [Subject](https://gitlab.com/guhernan/rush02-player-open.git) <br />
  > - [norminette](https://github.com/42School/norminette) <br /> 
- > - [Makefile](https://nicomedes.assistedcoding.eu/#/app/makefilegen) <br />
+ > - [Makefile](https://github.com/PandeoF1/makefile) <br />
 
 ## (づ｡◕‿‿◕｡)づ :
 ```
